@@ -25,6 +25,19 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
+app.post("/api/login", async (req, res) => {
+  const user = await model.findOne({
+    email: req.body.email,
+    password: req.body.password,
+  });
+
+  if (user) {
+    return res.json({ status: "Ok", user: true });
+  } else {
+    return res.json({ status: "error", user: false });
+  }
+});
+
 app.listen(8000, () => {
   console.log("Server started on port 8000");
 });
