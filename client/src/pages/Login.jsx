@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   const loginUser = async (e) => {
     e.preventDefault();
     const response = await fetch("http://localhost:8000/api/login", {
@@ -18,7 +19,12 @@ function Login() {
     });
 
     const data = await response.json();
-    console.log(data);
+    if (data.user) {
+      alert("Login successful");
+      navigate("/dashboard");
+    } else {
+      alert("Login Unsuccessful");
+    }
   };
 
   return (

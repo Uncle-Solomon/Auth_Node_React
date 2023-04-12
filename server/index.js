@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 import model from "./models/user.js";
 
+import jwt from "jsonwebtoken";
+
 dotenv.config();
 
 mongoose.connect(process.env.MONGODB_URL);
@@ -32,7 +34,14 @@ app.post("/api/login", async (req, res) => {
   });
 
   if (user) {
-    return res.json({ status: "Ok", user: true });
+    const token = jwt.sign(
+      {
+        name: user.name,
+        email: user.email,
+      },
+      process.env.SECRET_KEY
+    );
+    return res.json({ status: "Ok", user: token });
   } else {
     return res.json({ status: "error", user: false });
   }
