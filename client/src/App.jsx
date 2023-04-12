@@ -1,35 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const registerUser = async (e) => {
+    e.preventDefault();
+    const response = await fetch("http://localhost:8000/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+      }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+  };
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div>
+      <h1>Register</h1>
+      <form onSubmit={registerUser}>
+        <input
+          type="text"
+          placeholder="Your name"
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+        />
+        <input
+          type="email"
+          placeholder="Your email"
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+        />
+
+        <input
+          type="password"
+          placeholder="Your password"
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+        />
+        <input type="submit" value="Register" />
+      </form>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
